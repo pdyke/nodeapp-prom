@@ -16,3 +16,5 @@ services:
     container_name: nodeapp
     ports:
       - 1234:1234
+    volumes:
+      - ./nodeapp/server.js:/app/server.js

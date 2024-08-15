@@ -4,8 +4,6 @@ const client = require("prom-client")
 
 const collectDefaultMetrics = client.collectDefaultMetrics;
 
-collectDefaultMetrics();
-
 
 // set the PORT 
 const PORT = 1234
@@ -21,6 +19,8 @@ const register_counter = new client.Counter({
     name: "simple_register_counter_metric",
     help: "This metric counts the number of times register page is visited"
 })
+
+collectDefaultMetrics({ aboutus_counter, register_counter });
 
 // create the server
 const server = express();
@@ -48,10 +48,10 @@ server.get("/register", (request, response) => {
 
 
 // set the /metrics endpoint
-server.get("/metrics", (request, response) => {
+server.get("/metrics", async (request, response) => {
     
     response.set("Content-Type", client.register.contentType)
-    response.send(client.register.metrics())
+    response.end(await client.register.metrics("simple_app_counter_metric"))
 
 })
 
